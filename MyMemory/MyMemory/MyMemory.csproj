@@ -57,8 +57,14 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="JsonStringSerializer.cs" />
-    <Compile Include="Abstract.cs" />
+    <Compile Include="Playables.cs" />
+    <Compile Include="PlayList\DirectoryLoader.cs" />
+    <Compile Include="PlayList\FilePlayer.cs" />
+    <Compile Include="PlayList\PlayListItem.cs" />
+    <Compile Include="PlayList\FileListState.cs" />
+    <Compile Include="PlayList\JsonStringSerializer.cs" />
+    <Compile Include="PlayList\Abstract.cs" />
+    <Compile Include="SelectedPlayListItemConverter.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -73,8 +79,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="PlayList.cs" />
-    <Compile Include="PlayListFileStore.cs" />
+    <Compile Include="PlayList\PlayList.cs" />
+    <Compile Include="PlayList\FileCache.cs" />
+    <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -106,6 +113,10 @@
       <Project>{54110341-2671-4cc8-90bb-4e127370d22d}</Project>
       <Name>HLib</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="Images\resultset_next.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

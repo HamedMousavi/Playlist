@@ -7,8 +7,13 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="350" Width="525">
     <Grid>
-        <StackPanel Margin="0" Orientation="Vertical" >
-            <Grid>
+        <Grid Margin="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"></RowDefinition>
+                <RowDefinition Height="Auto"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+            </Grid.RowDefinitions>
+            <Grid Grid.Row="0">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="*" />
@@ -18,7 +23,7 @@
                 <TextBox Grid.Column="1" Margin="3" Text="{Binding Path, Mode=TwoWay}"></TextBox>
                 <Button Grid.Column="2" Click="BrowseClicked" Margin="3">Browse</Button>
             </Grid>
-            <Grid>
+            <Grid Grid.Row="1">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="Auto" />
@@ -27,12 +32,51 @@
                 </Grid.ColumnDefinitions>
                 <Label Grid.Column="0" Content="{Binding PlayBackDetail}" />
                 <Button Grid.Column="1" Content="&lt;" Click="PlayPrevousClicked" />
-                <Button Grid.Column="2" Content="{Binding PlaybackButtonText}" Click="PlayClicked" />
+                <Button Grid.Column="2" Content="Play" Click="PlayClicked" />
                 <Button Grid.Column="3" Content="&gt;" Click="PlayNextClicked" />
             </Grid>
+            <DataGrid Grid.Row="2" Name="FileListDataGrid" Visibility="Visible"
+                      IsReadOnly="True" CanUserAddRows="False"
+                      SelectionMode="Single" SelectionUnit="FullRow" 
+                      AutoGenerateColumns="False" Margin="0"
+                      ItemsSource="{Binding Path=FileList}"
+                      SelectedItem="{Binding Path=FileList.Selected}" >
+                <DataGrid.Resources>
+                    <ResourceDictionary>
+                        <SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}" Color="NavajoWhite"/>
+                        <SolidColorBrush x:Key="{x:Static SystemColors.ControlTextBrushKey}" Color="Black"/>
+                        <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="NavajoWhite"/>
+                        <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="Black"/>
+                        <local:SelectedPlayListItemConverter x:Key="SelectedPlayListItem" />
+                    </ResourceDictionary>
+                </DataGrid.Resources>
+                <DataGrid.RowStyle>
+                    <Style TargetType="DataGridRow">
+                        <EventSetter Event="RequestBringIntoView" Handler="DisableScrollEventHandler"></EventSetter>
+                        <Style.Triggers>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter Property="FontWeight" Value="ExtraBold" />
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </DataGrid.RowStyle>
+                <DataGrid.Columns>
+                    <DataGridTemplateColumn Header="">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel>
+                                    <Image Width="16" Source="{Binding Path=IsPlaying, Mode=OneWay, Converter={StaticResource SelectedPlayListItem}}" />
+                                </StackPanel>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTextColumn Header="File Name" Binding="{Binding Path=Label}"></DataGridTextColumn>
+                </DataGrid.Columns>
 
-        </StackPanel>
+            </DataGrid>
+        </Grid>
 
 
     </Grid>
 </Window>
+
