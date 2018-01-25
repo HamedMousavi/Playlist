@@ -1,0 +1,16 @@
+*.db
+*.zip
+*.rar
+*.jpg
+*.png
+
+
+# Build results
+[Dd]ebug/
+[Rr]elease/
+x64/
+build/
+[Bb]in/
+[Oo]bj/
+.vs/
+[pP]ackages/
