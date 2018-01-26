@@ -57,15 +57,27 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Playables.cs" />
-    <Compile Include="PlayList\DirectoryLoader.cs" />
-    <Compile Include="PlayList\FilePlayer.cs" />
-    <Compile Include="PlayList\PlayListItem.cs" />
-    <Compile Include="PlayList\FileListState.cs" />
-    <Compile Include="PlayList\JsonStringSerializer.cs" />
-    <Compile Include="PlayList\Abstract.cs" />
-    <Compile Include="SelectedPlayListItemConverter.cs" />
-    <Page Include="MainWindow.xaml">
+    <Compile Include="View\AddDirectory.xaml.cs">
+      <DependentUpon>AddDirectory.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\AddDirectoryViewModel.cs" />
+    <Compile Include="View\AppStatus.cs" />
+    <Compile Include="View\DirectoryViewModel.cs" />
+    <Compile Include="View\MainWindowViewModel.cs" />
+    <Compile Include="View\Playables.cs" />
+    <Compile Include="Domain\DirectoryLoader.cs" />
+    <Compile Include="Domain\FilePlayer.cs" />
+    <Compile Include="Domain\PlayListItem.cs" />
+    <Compile Include="Domain\FileListState.cs" />
+    <Compile Include="Domain\JsonStringSerializer.cs" />
+    <Compile Include="Domain\Abstract.cs" />
+    <Compile Include="View\RelayCommand.cs" />
+    <Compile Include="View\SelectedPlayListItemConverter.cs" />
+    <Page Include="View\AddDirectory.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -73,14 +85,14 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="MainWindow.xaml.cs">
+    <Compile Include="View\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="PlayList\PlayList.cs" />
-    <Compile Include="PlayList\FileCache.cs" />
+    <Compile Include="Domain\PlayList.cs" />
+    <Compile Include="Domain\FileCache.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>

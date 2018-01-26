@@ -2,7 +2,7 @@
 using System.Linq;
 
 
-namespace MyMemory
+namespace MyMemory.Domain
 {
 
     public class FileListState : IPlayListState

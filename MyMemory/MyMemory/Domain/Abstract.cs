@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 
 
-namespace MyMemory
+namespace MyMemory.Domain
 {
 
     public interface ISerializer<TOut>

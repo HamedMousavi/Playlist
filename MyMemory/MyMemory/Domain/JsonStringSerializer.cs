@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 
 
-namespace MyMemory
+namespace MyMemory.Domain
 {
 
     public class JsonStringSerializer : ISerializer<string>

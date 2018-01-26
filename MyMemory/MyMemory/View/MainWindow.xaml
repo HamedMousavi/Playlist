@@ -1,0 +1,101 @@
+﻿<Window x:Class="MyMemory.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:MyMemory"
+        mc:Ignorable="d"
+        Name="WndMain"
+        Title="Watched" Height="600" Width="800">
+    <DockPanel LastChildFill="True">
+
+        <StatusBar DockPanel.Dock="Bottom">
+
+            <!--<Separator DockPanel.Dock="Right" />-->
+            <StatusBarItem Margin="0" Padding="0" DockPanel.Dock="Right">
+                <StackPanel Margin="0" Orientation="Horizontal">
+                    <Label Content="At"></Label>
+                    <Label Content="{Binding Path=Status.Count}"></Label>
+                </StackPanel>
+            </StatusBarItem>
+            <Separator DockPanel.Dock="Right" />
+
+            <StatusBarItem Margin="0" Padding="0" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch">
+                <Label Margin="0" 
+                        Padding="0"
+                        Name="StatusLabel" 
+                        Content="{Binding Status.Message}" />
+            </StatusBarItem>
+        </StatusBar>
+
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="5*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <Label Grid.Row="0" Grid.Column="0" Padding="6" Margin="6">Directories</Label>
+            <Button Grid.Row="0" Grid.Column="1" Padding="10,0,10,0" Margin="6" Command="{Binding AddDirectoryCommand}" CommandParameter="{Binding ElementName=WndMain}">+</Button>
+            <ListBox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Margin="6,0,6,6" 
+                     ItemsSource="{Binding Directories}" SelectedItem="{Binding SelectedDirectory}">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <Label Content="{Binding Name}" />
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+            <StackPanel Grid.Row="0" Grid.Column="2" Orientation="Horizontal">
+                <Label Margin="6">Files</Label>
+                <Button Padding="10,0,10,0" Margin="6" Command="{Binding PlayPreviousCommand}">Play Previous</Button>
+                <Button Padding="10,0,10,0" Margin="6" Command="{Binding PlayCurrentCommand}">Play Current</Button>
+                <Button Padding="10,0,10,0" Margin="6" Command="{Binding PlayNextCommand}">Play Next</Button>
+            </StackPanel>
+            <DataGrid Grid.Row="1" Grid.Column="2" Name="FileListDataGrid" Visibility="Visible"
+                      IsReadOnly="True" CanUserAddRows="False"
+                      SelectionMode="Single" SelectionUnit="FullRow" 
+                      AutoGenerateColumns="False" Margin="6,0,6,6"
+                      ItemsSource="{Binding Path=SelectedDirectory.FileListViewModel}"
+                      SelectedItem="{Binding Path=SelectedDirectory.FileListViewModel.Selected}" >
+                <DataGrid.Resources>
+                    <ResourceDictionary>
+                        <SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}" Color="NavajoWhite"/>
+                        <SolidColorBrush x:Key="{x:Static SystemColors.ControlTextBrushKey}" Color="Black"/>
+                        <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="NavajoWhite"/>
+                        <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="Black"/>
+                        <local:SelectedPlayListItemConverter x:Key="SelectedPlayListItem" />
+                    </ResourceDictionary>
+                </DataGrid.Resources>
+                <DataGrid.RowStyle>
+                    <Style TargetType="DataGridRow">
+                        <EventSetter Event="RequestBringIntoView" Handler="DisableScrollEventHandler"></EventSetter>
+                        <Style.Triggers>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter Property="FontWeight" Value="ExtraBold" />
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </DataGrid.RowStyle>
+                <DataGrid.Columns>
+                    <DataGridTemplateColumn Header="">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel>
+                                    <Image Width="16" Source="{Binding Path=IsPlaying, Mode=OneWay, Converter={StaticResource SelectedPlayListItem}}" />
+                                </StackPanel>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTextColumn Header="File Name" Binding="{Binding Path=Label}"></DataGridTextColumn>
+                </DataGrid.Columns>
+
+            </DataGrid>
+        </Grid>
+
+
+    </DockPanel>
+</Window>
+

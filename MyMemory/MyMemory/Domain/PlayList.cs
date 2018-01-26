@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 
-namespace MyMemory
+namespace MyMemory.Domain
 {
 
     public class PlayList : IPlayList

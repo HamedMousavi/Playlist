@@ -2,7 +2,7 @@
 using System.IO;
 
 
-namespace MyMemory
+namespace MyMemory.Domain
 {
 
     public class FilePlayer : IPlayListItemPlayer

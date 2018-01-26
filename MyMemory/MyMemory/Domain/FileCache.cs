@@ -2,7 +2,7 @@
 using System.Text;
 
 
-namespace MyMemory
+namespace MyMemory.Domain
 {
 
     public class FileCache : IPlayListSaver, IPlayListLoader

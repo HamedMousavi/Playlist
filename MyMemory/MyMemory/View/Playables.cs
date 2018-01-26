@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using MyMemory.Annotations;
+using MyMemory.Domain;
 
 
 namespace MyMemory

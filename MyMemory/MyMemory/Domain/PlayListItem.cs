@@ -1,4 +1,4 @@
-﻿namespace MyMemory
+﻿namespace MyMemory.Domain
 {
 
     public class PlayListItem : IPlayListItem
