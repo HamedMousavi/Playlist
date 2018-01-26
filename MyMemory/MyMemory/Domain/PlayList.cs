@@ -74,7 +74,7 @@ namespace MyMemory.Domain
 
         protected virtual IPlayListItem CreateItem(string name)
         {
-            return new PlayListItem(name, _itemPlayer);
+            return new PlayListItem(name, _itemPlayer, name);
         }
 
 

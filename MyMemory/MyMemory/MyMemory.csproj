@@ -57,11 +57,13 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Domain\DirectoryList.cs" />
     <Compile Include="View\AddDirectory.xaml.cs">
       <DependentUpon>AddDirectory.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\AddDirectoryViewModel.cs" />
     <Compile Include="View\AppStatus.cs" />
+    <Compile Include="View\Directories.cs" />
     <Compile Include="View\DirectoryViewModel.cs" />
     <Compile Include="View\MainWindowViewModel.cs" />
     <Compile Include="View\Playables.cs" />

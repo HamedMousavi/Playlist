@@ -13,6 +13,34 @@ namespace MyMemory.Domain
     }
 
 
+    public interface IDirList
+    {
+        void Save();
+        void Load();
+
+        void Save(IDirListSaver saver);
+        void Load(IDirListLoader loader);
+    }
+
+
+    public interface IDirListSaver
+    {
+        void Save(IDirListState list);
+    }
+
+
+    public interface IDirListLoader
+    {
+        IDirListState Load();
+    }
+
+    public interface IDirListState
+    {
+        List<DirectoryItem> Items { get; set; }
+    }
+
+
+
     public interface IPlayList
     {
         IPlayListItem Current();
@@ -23,7 +51,7 @@ namespace MyMemory.Domain
 
         event EventHandler WhenLoaded;
         event EventHandler WhenPlayed;
-        
+
         bool IsEmpty { get; }
 
         void Save();
