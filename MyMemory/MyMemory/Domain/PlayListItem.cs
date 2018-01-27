@@ -1,31 +1,33 @@
 ﻿namespace MyMemory.Domain
 {
 
-    public class PlayListItem : IPlayListItem
+    public class PlaylistItem : IPlaylistItem
     {
 
-        private readonly string _filePath;
-        private readonly string _name;
-        private readonly IPlayListItemPlayer _player;
+        private readonly IPlaylistItemPlayer _player;
 
 
-        public PlayListItem(string name, IPlayListItemPlayer player, string filePath)
+        public PlaylistItem(string name, IPlaylistItemPlayer player, string resourcePath)
         {
-            _name = name;
+            Name = name;
             _player = player;
-            _filePath = filePath;
+            Path = resourcePath;
         }
 
 
         public void Play()
         {
-            _player.Play(_filePath);
+            _player.Play(Path);
         }
 
 
         public override string ToString()
         {
-            return _name;
+            return Name;
         }
+
+
+        public string Name { get; set; }
+        public string Path { get; set; }
     }
 }

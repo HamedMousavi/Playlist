@@ -8,7 +8,7 @@ using MyMemory.Domain;
 namespace MyMemory
 {
 
-    public class PlayableList : ObservableCollection<Playable>, IPlayListSaver
+    public class PlayableList : ObservableCollection<Playable>, IPlaylistSaver
     {
         private Playable _playing;
         public Playable Selected { get; set; }
@@ -26,13 +26,13 @@ namespace MyMemory
         }
 
 
-        public void Save(IPlayListState playList)
+        public void Save(IPlaylistState playlist)
         {
             Clear();
 
-            foreach (var name in playList.Names)
+            foreach (var resource in playlist.Resources)
             {
-                var playable = new Playable(name, Count == playList.Index);
+                var playable = new Playable(resource.Name, Count == playlist.Index);
                 Add(playable);
 
                 if (playable.IsPlaying) _playing = playable;

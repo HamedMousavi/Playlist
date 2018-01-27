@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Globalization;
+using System.Windows;
 using System.Windows.Data;
 
 namespace MyMemory
@@ -9,18 +10,18 @@ namespace MyMemory
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            var state = (bool)value;
+            var state = value != null && (bool)value;
             if (state)
             {
                 return "pack://application:,,,/Images/resultset_next.png";
             }
 
-            return "";
+            return DependencyProperty.UnsetValue;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            throw new NotImplementedException();
+            return Binding.DoNothing;
         }
     }
 }

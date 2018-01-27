@@ -28,11 +28,11 @@ namespace MyMemory
                     $"{Path}{System.IO.Path.DirectorySeparatorChar}playlist.json",
                     new JsonStringSerializer());
 
-                var loader = new DirectoryLoader(cache, Path);
+                var loader = new DirFileLoader(cache, Path);
 
-                _playlist = new PlayList(loader, cache, new FilePlayer(Path));
+                _playlist = new Playlist(loader, cache, new FilePlayer());
                 _playlist.WhenLoaded += (sender, args) => WhenDirectoryLoaded();
-                _playlist.WhenPlayed += (sender, args) => WhenFilePlayed(((PlayList.ItemEventArgs)args).Item);
+                _playlist.WhenPlayed += (sender, args) => WhenFilePlayed(((Playlist.ItemEventArgs)args).Item);
                 _playlist.Load();
             }
 
@@ -46,13 +46,13 @@ namespace MyMemory
         }
 
 
-        private PlayList _playlist;
+        private Playlist _playlist;
         private readonly PlayableList _filesViewModel;
         private string _name;
         private string _path;
 
 
-        private void WhenFilePlayed(IPlayListItem item)
+        private void WhenFilePlayed(IPlaylistItem item)
         {
             // Update playlist
             _filesViewModel.Select(_playlist.IndexOf(item));

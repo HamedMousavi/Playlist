@@ -5,7 +5,7 @@ using System.IO;
 namespace MyMemory.Domain
 {
 
-    public class FilePlayer : IPlayListItemPlayer
+    public class FilePlayer : IPlaylistItemPlayer
     {
 
         private readonly string _basePath;
@@ -16,11 +16,25 @@ namespace MyMemory.Domain
             _basePath = basePath;
         }
 
+
+        public FilePlayer()
+        {
+        }
+
+
         public void Play<T>(T fileName)
         {
-            System.Diagnostics.Process.Start($"{_basePath}{Path.DirectorySeparatorChar}{fileName}");
-            OnWhenPlayed($"fileName");
+            var path =
+                string.IsNullOrWhiteSpace(_basePath)
+                    ? $"{fileName}"
+                    : Path.Combine(_basePath, $"{fileName}");
+
+            System.Diagnostics.Process.Start(path);
+            OnWhenPlayed($"{fileName}");
         }
+
+
+        #region Events
 
         public event EventHandler WhenPlayed;
 
@@ -38,5 +52,7 @@ namespace MyMemory.Domain
         {
             WhenPlayed?.Invoke(this, new FilePlayedEventArgs(filename));
         }
+
+        #endregion
     }
 }

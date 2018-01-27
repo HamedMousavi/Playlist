@@ -6,20 +6,20 @@ using System.Linq;
 namespace MyMemory.Domain
 {
 
-    public class PlayList : IPlayList
+    public class Playlist : IPlaylist
     {
 
-        private readonly IPlayListLoader _loader;
-        private readonly IPlayListSaver _saver;
-        private readonly IPlayListItemPlayer _itemPlayer;
-        private List<IPlayListItem> _list;
+        private readonly IPlaylistLoader _loader;
+        private readonly IPlaylistSaver _saver;
+        private readonly IPlaylistItemPlayer _itemPlayer;
+        private List<IPlaylistItem> _list;
 
         public bool IsEmpty => _list == null || !_list.Any();
         public int Count => IsEmpty ? 0 : _list.Count;
         public int SelectedIndex { get; private set; }
 
 
-        public PlayList(IPlayListLoader loader, IPlayListSaver saver, IPlayListItemPlayer itemPlayer)
+        public Playlist(IPlaylistLoader loader, IPlaylistSaver saver, IPlaylistItemPlayer itemPlayer)
         {
             _loader = loader;
             _saver = saver;
@@ -30,7 +30,7 @@ namespace MyMemory.Domain
         }
 
 
-        private IPlayListItem Find(int index)
+        private IPlaylistItem Find(int index)
         {
             if (IsEmpty)
             {
@@ -55,48 +55,48 @@ namespace MyMemory.Domain
         }
 
 
-        protected virtual IPlayListState GetState()
+        protected virtual IPlaylistState GetState()
         {
-            return new FileListState(_list.Select(i => i.ToString()), SelectedIndex);
+            return new PlaylistState(_list, SelectedIndex);
         }
 
 
-        protected virtual void SetState(IPlayListState state)
+        protected virtual void SetState(IPlaylistState state)
         {
             if (state == null) return;
 
-            _list = state.Names.Select(CreateItem).ToList();
+            _list = state.Resources.Select(CreateItem).ToList();
             SelectedIndex = state.Index;
 
             OnWhenLoaded();
         }
 
 
-        protected virtual IPlayListItem CreateItem(string name)
+        protected virtual IPlaylistItem CreateItem(INameableResource resource)
         {
-            return new PlayListItem(name, _itemPlayer, name);
+            return new PlaylistItem(resource.Name, _itemPlayer, resource.Path);
         }
 
 
-        public IPlayListItem Current()
+        public IPlaylistItem Current()
         {
             return Find(SelectedIndex);
         }
 
 
-        public IPlayListItem Next()
+        public IPlaylistItem Next()
         {
             return Find(SelectedIndex + 1);
         }
 
 
-        public IPlayListItem Prev()
+        public IPlaylistItem Prev()
         {
             return Find(SelectedIndex - 1);
         }
 
 
-        public int IndexOf(IPlayListItem item)
+        public int IndexOf(IPlaylistItem item)
         {
             return IsEmpty ? -1 : _list.IndexOf(item);
         }
@@ -108,7 +108,7 @@ namespace MyMemory.Domain
         }
 
 
-        public void Save(IPlayListSaver saver)
+        public void Save(IPlaylistSaver saver)
         {
             saver.Save(GetState());
         }
@@ -120,7 +120,7 @@ namespace MyMemory.Domain
         }
 
 
-        public void Load(IPlayListLoader loader)
+        public void Load(IPlaylistLoader loader)
         {
             SetState(loader.Load());
         }
@@ -141,12 +141,12 @@ namespace MyMemory.Domain
 
         public class ItemEventArgs : EventArgs
         {
-            public ItemEventArgs(IPlayListItem item)
+            public ItemEventArgs(IPlaylistItem item)
             {
                 Item = item;
             }
 
-            public IPlayListItem Item { get; }
+            public IPlaylistItem Item { get; }
         }
     }
 }

@@ -58,6 +58,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Domain\DirectoryList.cs" />
+    <Compile Include="Domain\FileResource.cs" />
     <Compile Include="View\AddDirectory.xaml.cs">
       <DependentUpon>AddDirectory.xaml</DependentUpon>
     </Compile>
@@ -67,10 +68,10 @@
     <Compile Include="View\DirectoryViewModel.cs" />
     <Compile Include="View\MainWindowViewModel.cs" />
     <Compile Include="View\Playables.cs" />
-    <Compile Include="Domain\DirectoryLoader.cs" />
+    <Compile Include="Domain\DirFileLoader.cs" />
     <Compile Include="Domain\FilePlayer.cs" />
     <Compile Include="Domain\PlayListItem.cs" />
-    <Compile Include="Domain\FileListState.cs" />
+    <Compile Include="Domain\PlaylistState.cs" />
     <Compile Include="Domain\JsonStringSerializer.cs" />
     <Compile Include="Domain\Abstract.cs" />
     <Compile Include="View\RelayCommand.cs" />

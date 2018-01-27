@@ -5,6 +5,12 @@ using System.Collections.Generic;
 namespace MyMemory.Domain
 {
 
+    public interface INameableResource
+    {
+        string Name { get; }
+        string Path { get; }
+    }
+
     public interface ISerializer<TOut>
     {
         TOut Serialize<TIn>(TIn serializable);
@@ -41,13 +47,13 @@ namespace MyMemory.Domain
 
 
 
-    public interface IPlayList
+    public interface IPlaylist
     {
-        IPlayListItem Current();
-        IPlayListItem Next();
-        IPlayListItem Prev();
+        IPlaylistItem Current();
+        IPlaylistItem Next();
+        IPlaylistItem Prev();
 
-        int IndexOf(IPlayListItem item);
+        int IndexOf(IPlaylistItem item);
 
         event EventHandler WhenLoaded;
         event EventHandler WhenPlayed;
@@ -55,41 +61,42 @@ namespace MyMemory.Domain
         bool IsEmpty { get; }
 
         void Save();
-        void Save(IPlayListSaver saver);
+        void Save(IPlaylistSaver saver);
 
         void Load();
-        void Load(IPlayListLoader loader);
+        void Load(IPlaylistLoader loader);
     }
 
 
-    public interface IPlayListItem
+    public interface IPlaylistItem : INameableResource
     {
         void Play();
     }
 
 
-    public interface IPlayListState
+    public interface IPlaylistState
     {
         bool IsEmpty { get; }
 
-        IEnumerable<string> Names { get; }
         int Index { get; }
+
+        IEnumerable<INameableResource> Resources { get; }
     }
 
 
-    public interface IPlayListSaver
+    public interface IPlaylistSaver
     {
-        void Save(IPlayListState playList);
+        void Save(IPlaylistState playlist);
     }
 
 
-    public interface IPlayListLoader
+    public interface IPlaylistLoader
     {
-        IPlayListState Load();
+        IPlaylistState Load();
     }
 
 
-    public interface IPlayListItemPlayer
+    public interface IPlaylistItemPlayer
     {
         void Play<T>(T t);
         event EventHandler WhenPlayed;

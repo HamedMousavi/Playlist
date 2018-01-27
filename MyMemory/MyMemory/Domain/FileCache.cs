@@ -5,7 +5,7 @@ using System.Text;
 namespace MyMemory.Domain
 {
 
-    public class FileCache : IPlayListSaver, IPlayListLoader
+    public class FileCache : IPlaylistSaver, IPlaylistLoader
     {
 
         private readonly ISerializer<string> _serializer;
@@ -42,15 +42,15 @@ namespace MyMemory.Domain
         }
 
 
-        public void Save(IPlayListState playList)
+        public void Save(IPlaylistState playlist)
         {
-            SaveContent(_serializer.Serialize(playList));
+            SaveContent(_serializer.Serialize(playlist));
         }
 
 
-        public IPlayListState Load()
+        public IPlaylistState Load()
         {
-            return _serializer.Deserialize<FileListState>(LoadContent());
+            return _serializer.Deserialize<IPlaylistState>(LoadContent());
         }
     }
 }

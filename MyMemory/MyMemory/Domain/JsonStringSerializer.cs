@@ -9,7 +9,13 @@ namespace MyMemory.Domain
 
         public string Serialize<TIn>(TIn serializable)
         {
-            return JsonConvert.SerializeObject(serializable);
+            return JsonConvert.SerializeObject(
+                serializable,
+                new JsonSerializerSettings
+                {
+                    TypeNameHandling = TypeNameHandling.All,
+                    Formatting = Formatting.Indented
+                });
         }
 
 
@@ -17,14 +23,25 @@ namespace MyMemory.Domain
         {
             return string.IsNullOrWhiteSpace(serialized)
                 ? default(TIn)
-                : JsonConvert.DeserializeObject<TIn>(serialized);
+                : JsonConvert.DeserializeObject<TIn>(
+                    serialized,
+                    new JsonSerializerSettings
+                    {
+                        TypeNameHandling = TypeNameHandling.All
+                    });
         }
 
 
         public void Deserialize<TIn>(string serialized, TIn serializable)
         {
             if (!string.IsNullOrWhiteSpace(serialized) && serializable != null)
-                JsonConvert.PopulateObject(serialized, serializable);
+                JsonConvert.PopulateObject(
+                    serialized,
+                    serializable,
+                    new JsonSerializerSettings
+                    {
+                        TypeNameHandling = TypeNameHandling.All
+                    });
         }
     }
 }
