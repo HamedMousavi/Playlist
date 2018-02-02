@@ -1,9 +1,10 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using MyMemory.Annotations;
-using MyMemory.Domain;
+using MyMemory.Domain.Abstract;
 
 
 namespace MyMemory
@@ -20,11 +21,12 @@ namespace MyMemory
             if (_playing != null)
                 _playing.IsPlaying = false;
 
-            _playing = this.SingleOrDefault(p => p.IsEqual(item));
+            _playing = this.SingleOrDefault(p => IsEqual(p.Id, item.Id));
             if (_playing != null) _playing.IsPlaying = true;
 
             return _playing;
         }
+
 
         public void Save(IPlaylistState playlist)
         {
@@ -37,7 +39,7 @@ namespace MyMemory
                 var playable = new Playable(
                     resource,
                     (++index).ToString(indexFormat),
-                    resource.IsEqual(playlist.SelectedItemId));
+                    IsEqual(resource.Id, playlist.SelectedItemId));
 
                 Add(playable);
 
@@ -45,6 +47,12 @@ namespace MyMemory
             }
         }
 
+
+        private static bool IsEqual(string id, string itemId)
+        {
+            //bool IsEqual(string id); // Check if resource id matches passed id
+            return string.Equals(id, itemId, StringComparison.InvariantCultureIgnoreCase);
+        }
     }
 
 
@@ -52,14 +60,14 @@ namespace MyMemory
     {
 
         private bool _isPlaying;
-        private readonly INameableResource _resource;
+        private readonly IResource _resource;
 
 
         public Playable()
         { }
 
 
-        public Playable(INameableResource resource, string rowIndex, bool isPlaying)
+        public Playable(IResource resource, string rowIndex, bool isPlaying)
         {
             _resource = resource;
             IsPlaying = isPlaying;
@@ -88,11 +96,11 @@ namespace MyMemory
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        public bool IsEqual(IPlaylistItem item)
-        {
-            if (item == null) return _resource == null;
+        //public bool IsEqual(IPlaylistItem item)
+        //{
+        //    if (item == null) return _resource == null;
 
-            return _resource.IsEqual(item.Id);
-        }
+        //    return _resource.IsEqual(item.Id);
+        //}
     }
 }

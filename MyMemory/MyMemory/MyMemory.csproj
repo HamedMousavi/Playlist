@@ -34,11 +34,17 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Grace, Version=6.3.1.0, Culture=neutral, PublicKeyToken=b7d24c6367970497, processorArchitecture=MSIL">
+      <HintPath>..\packages\Grace.6.3.1\lib\net45\Grace.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
@@ -58,8 +64,14 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Domain\DirectoryList.cs" />
+    <Compile Include="BootStrapper.cs" />
+    <Compile Include="Domain\Abstract\PlayList.cs" />
+    <Compile Include="Domain\Abstract\PlayListContainer.cs" />
+    <Compile Include="Domain\DirectoryItem.cs" />
+    <Compile Include="Domain\PlaylistContainerFileStore.cs" />
+    <Compile Include="Domain\DirectoryListState.cs" />
     <Compile Include="Domain\FileResource.cs" />
+    <Compile Include="Domain\PlaylistContainer.cs" />
     <Compile Include="PathUtil.cs" />
     <Compile Include="StandarWindowsDialogs.cs" />
     <Compile Include="View\AddDirectory.xaml.cs">
@@ -76,7 +88,7 @@
     <Compile Include="Domain\PlayListItem.cs" />
     <Compile Include="Domain\PlaylistState.cs" />
     <Compile Include="Domain\JsonStringSerializer.cs" />
-    <Compile Include="Domain\Abstract.cs" />
+    <Compile Include="Domain\Abstract\Common.cs" />
     <Compile Include="View\RelayCommand.cs" />
     <Compile Include="View\SelectedPlayListItemConverter.cs" />
     <Page Include="View\AddDirectory.xaml">

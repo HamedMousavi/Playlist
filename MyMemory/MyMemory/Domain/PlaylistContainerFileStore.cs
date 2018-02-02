@@ -6,17 +6,17 @@ using MyMemory.Domain.Abstract;
 namespace MyMemory.Domain
 {
 
-    public class FileCache : IPlaylistSaver, IPlaylistLoader
+    public class PlaylistContainerFileStore : IPlaylistContainerStore
     {
 
         private readonly ISerializer<string> _serializer;
         private readonly string _storagePath;
 
 
-        public FileCache(string storagePath, ISerializer<string> serializer)
+        public PlaylistContainerFileStore(string storagePath, ISerializer<string> serializer)
         {
-            _serializer = serializer;
             _storagePath = storagePath;
+            _serializer = serializer;
         }
 
 
@@ -41,17 +41,17 @@ namespace MyMemory.Domain
                 return content;
             }
         }
+        
 
-
-        public void Save(IPlaylistState playlist)
+        public void Save(IPlaylistContainerState list)
         {
-            SaveContent(_serializer.Serialize(playlist));
+            SaveContent(_serializer.Serialize(list));
         }
 
 
-        public IPlaylistState Load()
+        public IPlaylistContainerState Load()
         {
-            return _serializer.Deserialize<IPlaylistState>(LoadContent());
+            return _serializer.Deserialize<DirectoryListState>(LoadContent());
         }
     }
 }

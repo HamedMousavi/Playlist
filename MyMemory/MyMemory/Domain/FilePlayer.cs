@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using MyMemory.Domain.Abstract;
 
 
 namespace MyMemory.Domain

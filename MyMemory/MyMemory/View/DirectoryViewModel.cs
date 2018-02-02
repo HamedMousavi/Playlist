@@ -4,6 +4,7 @@ using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using MyMemory.Annotations;
 using MyMemory.Domain;
+using MyMemory.Domain.Abstract;
 
 
 namespace MyMemory

@@ -2,53 +2,8 @@
 using System.Collections.Generic;
 
 
-namespace MyMemory.Domain
+namespace MyMemory.Domain.Abstract
 {
-
-    public interface INameableResource
-    {
-        string Name { get; }
-        string Path { get; }
-        string Id { get; }
-
-        bool IsEqual(string id); // Check if resource id matches passed id
-    }
-
-    public interface ISerializer<TOut>
-    {
-        TOut Serialize<TIn>(TIn serializable);
-        TIn Deserialize<TIn>(TOut serialized);
-        void Deserialize<TIn>(TOut serialized, TIn serializable);
-    }
-
-
-    public interface IDirList
-    {
-        void Save();
-        void Load();
-
-        void Save(IDirListSaver saver);
-        void Load(IDirListLoader loader);
-    }
-
-
-    public interface IDirListSaver
-    {
-        void Save(IDirListState list);
-    }
-
-
-    public interface IDirListLoader
-    {
-        IDirListState Load();
-    }
-
-    public interface IDirListState
-    {
-        List<DirectoryItem> Items { get; set; }
-    }
-
-
 
     public interface IPlaylist
     {
@@ -72,7 +27,7 @@ namespace MyMemory.Domain
     }
 
 
-    public interface IPlaylistItem : INameableResource
+    public interface IPlaylistItem : IResource
     {
         void Play();
     }
@@ -84,7 +39,7 @@ namespace MyMemory.Domain
 
         string SelectedItemId { get; }
 
-        IEnumerable<INameableResource> Resources { get; }
+        IEnumerable<IResource> Resources { get; }
     }
 
 
@@ -105,4 +60,5 @@ namespace MyMemory.Domain
         void Play<T>(T t);
         event EventHandler WhenPlayed;
     }
+
 }

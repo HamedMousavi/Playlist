@@ -1,10 +1,11 @@
-﻿using System.ComponentModel;
+﻿using MyMemory.Annotations;
+using MyMemory.Domain;
+using MyMemory.Domain.Abstract;
+using MyMemory.View;
+using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Input;
-using MyMemory.Annotations;
-using MyMemory.Domain;
-using MyMemory.View;
 
 
 namespace MyMemory
@@ -14,22 +15,33 @@ namespace MyMemory
     {
 
         private DirectoryViewModel _selectedDirectory;
-        private readonly DirList _directories;
+        private PlaylistContainer _playlistContainer;
+        private readonly IPlaylistContainerStore _playlistContainerStore;
 
 
-        public MainWindowViewModel()
+        public MainWindowViewModel(IPlaylistContainerStore playlistContainerStore)
         {
-            var dirStore = new DirectoryListStore(
-                System.IO.Path.Combine(HLib.Io.PathUtil.ApplicationDirectory, "playlist.json"),
-                new JsonStringSerializer());
+            _playlistContainerStore = playlistContainerStore;
 
-            _directories = new DirList(dirStore, dirStore);
-            _directories.Load();
+            PropagateStatusChangeEvent();
 
             Directories = new Directories();
-            _directories.Save(Directories);
+            
+            LoadPlaylists(_playlistContainerStore);
+        }
+        
 
-            AppStatus.Instance.PropertyChanged += (sender, args) => OnPropertyChanged(nameof(Status));
+        private void LoadPlaylists(IPlaylistContainerLoader loader)
+        {
+            _playlistContainer = new PlaylistContainer();
+            _playlistContainer.Load(loader);
+            _playlistContainer.Save(Directories);
+        }
+
+
+        private void PropagateStatusChangeEvent()
+        {
+            Status.PropertyChanged += (s, a) => OnPropertyChanged(nameof(Status));
         }
 
 
@@ -55,8 +67,8 @@ namespace MyMemory
 
         private void AddDirectory(string dirTitle, string dirPath)
         {
-            _directories.Add(dirTitle, dirPath);
-            _directories.Save();
+            _playlistContainer.Add(dirTitle, dirPath);
+            _playlistContainer.Save(_playlistContainerStore);
 
             SelectedDirectory = Directories.Add(dirTitle, dirPath);
         }

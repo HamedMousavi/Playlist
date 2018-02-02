@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using MyMemory.Domain.Abstract;
 
 
 namespace MyMemory.Domain
@@ -14,7 +15,7 @@ namespace MyMemory.Domain
         public PlaylistState(IEnumerable<FileResource> resources) : this(resources, string.Empty) { }
 
 
-        public PlaylistState(IEnumerable<INameableResource> resources, string selectedItemId)
+        public PlaylistState(IEnumerable<IResource> resources, string selectedItemId)
         {
             Resources = resources;
             SelectedItemId = selectedItemId;
@@ -25,6 +26,6 @@ namespace MyMemory.Domain
 
         public string SelectedItemId { get; set; }
 
-        public IEnumerable<INameableResource> Resources { get; set; }
+        public IEnumerable<IResource> Resources { get; set; }
     }
 }

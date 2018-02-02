@@ -1,11 +1,11 @@
 ﻿using System.Collections.ObjectModel;
-using MyMemory.Domain;
+using MyMemory.Domain.Abstract;
 
 
 namespace MyMemory.View
 {
 
-    public class Directories : ObservableCollection<DirectoryViewModel>, IDirListSaver
+    public class Directories : ObservableCollection<DirectoryViewModel>, IPlaylistContainerSaver
     {
 
         internal DirectoryViewModel Add(string dirTitle, string dirPath)
@@ -17,7 +17,7 @@ namespace MyMemory.View
             return dir;
         }
 
-        public void Save(IDirListState state)
+        public void Save(IPlaylistContainerState state)
         {
             Clear();
 

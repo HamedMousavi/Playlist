@@ -1,4 +1,4 @@
-﻿using System;
+﻿using MyMemory.Domain.Abstract;
 
 
 namespace MyMemory.Domain
@@ -33,12 +33,6 @@ namespace MyMemory.Domain
         public override string ToString()
         {
             return Name;
-        }
-
-
-        public bool IsEqual(string id)
-        {
-            return string.Equals(Id, id, StringComparison.InvariantCultureIgnoreCase);
         }
 
 

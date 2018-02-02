@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using MyMemory.Domain.Abstract;
+using Newtonsoft.Json;
 
 
 namespace MyMemory.Domain

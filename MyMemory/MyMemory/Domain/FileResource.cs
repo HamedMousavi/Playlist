@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Security.Cryptography;
 using System.Text;
+using MyMemory.Domain.Abstract;
 
 
 namespace MyMemory.Domain
 {
 
-    public class FileResource : INameableResource
+    public class FileResource : IResource
     {
 
         public FileResource(string path)
@@ -15,16 +16,15 @@ namespace MyMemory.Domain
 
             using (var md5 = MD5.Create())
             {
-                Id = BitConverter.ToString(md5.ComputeHash(Encoding.UTF8.GetBytes(Path)));
+                Id = BitConverter.ToString(
+                    md5
+                    .ComputeHash(Encoding.UTF8.GetBytes(Path)))
+                    .Replace("-", string.Empty);
             }
         }
 
         public string Name => string.IsNullOrWhiteSpace(Path) ? null : System.IO.Path.GetFileName(Path);
         public string Path { get; set; }
         public string Id { get; set; }
-        public bool IsEqual(string id)
-        {
-            return string.Equals(Id, id, StringComparison.InvariantCultureIgnoreCase);
-        }
     }
 }

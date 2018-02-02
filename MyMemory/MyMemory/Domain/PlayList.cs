@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using MyMemory.Domain.Abstract;
 
 
 namespace MyMemory.Domain
@@ -91,7 +92,7 @@ namespace MyMemory.Domain
         }
 
 
-        protected virtual IPlaylistItem CreateItem(INameableResource resource)
+        protected virtual IPlaylistItem CreateItem(IResource resource)
         {
             return new PlaylistItem(
                 _itemPlayer,
