@@ -1,11 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.27130.2024
+VisualStudioVersion = 15.0.27130.2026
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyMemory", "MyMemory\MyMemory.csproj", "{07ABC853-AE3C-4857-9E7E-3DA43F0C6102}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HLib", "MyMemory\HLib\HLib.csproj", "{54110341-2671-4CC8-90BB-4E127370D22D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,10 +15,6 @@ Global
 		{07ABC853-AE3C-4857-9E7E-3DA43F0C6102}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{07ABC853-AE3C-4857-9E7E-3DA43F0C6102}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{07ABC853-AE3C-4857-9E7E-3DA43F0C6102}.Release|Any CPU.Build.0 = Release|Any CPU
-		{54110341-2671-4CC8-90BB-4E127370D22D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{54110341-2671-4CC8-90BB-4E127370D22D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{54110341-2671-4CC8-90BB-4E127370D22D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{54110341-2671-4CC8-90BB-4E127370D22D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

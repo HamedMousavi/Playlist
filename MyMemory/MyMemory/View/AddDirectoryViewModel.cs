@@ -33,6 +33,7 @@ namespace MyMemory
 
         public ICommand BrowseDirectoryCommand => new RelayCommand(BrowseDirectory);
         public ICommand AddDirectoryCommand => new RelayCommand(AddDirectory);
+        public ICommand CloseDirectoryCommand => new RelayCommand(a => ((Window)a?[0])?.Close());
 
 
         public AddDirectoryViewModel(Action<string, string> addDirectoryAction)

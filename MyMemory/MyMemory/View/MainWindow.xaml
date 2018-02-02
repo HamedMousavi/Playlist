@@ -41,10 +41,20 @@
             <Label Grid.Row="0" Grid.Column="0" Padding="6" Margin="6">Directories</Label>
             <Button Grid.Row="0" Grid.Column="1" Padding="10,0,10,0" Margin="6" Command="{Binding AddDirectoryCommand}" CommandParameter="{Binding ElementName=WndMain}">+</Button>
             <ListBox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Margin="6,0,6,6" 
-                     ItemsSource="{Binding Directories}" SelectedItem="{Binding SelectedDirectory}">
+                     ItemsSource="{Binding Directories}" SelectedItem="{Binding SelectedDirectory}"
+                     HorizontalContentAlignment="Stretch">
                 <ListBox.ItemTemplate>
-                    <DataTemplate>
-                        <Label Content="{Binding Name}" />
+                    <DataTemplate DataType="local:DirectoryViewModel">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <Button Grid.Column="0" Command="{Binding OpenDirectoryCommand}" Margin="6,2,6,2" Background="Transparent" BorderThickness="0" BorderBrush="Transparent">
+                                <Image MaxWidth="24" MaxHeight="24" Source="../Images/dir.png"></Image>
+                            </Button>
+                            <Label Grid.Column="1" Content="{Binding Name}" />
+                        </Grid>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>
@@ -53,13 +63,15 @@
                 <Button Padding="10,0,10,0" Margin="6" Command="{Binding PlayPreviousCommand}">Play Previous</Button>
                 <Button Padding="10,0,10,0" Margin="6" Command="{Binding PlayCurrentCommand}">Play Current</Button>
                 <Button Padding="10,0,10,0" Margin="6" Command="{Binding PlayNextCommand}">Play Next</Button>
+                <Button Padding="10,0,10,0" Margin="6" Command="{Binding SetIndexCommand}">Set As Current</Button>
             </StackPanel>
             <DataGrid Grid.Row="1" Grid.Column="2" Name="FileListDataGrid" Visibility="Visible"
                       IsReadOnly="True" CanUserAddRows="False"
                       SelectionMode="Single" SelectionUnit="FullRow" 
                       AutoGenerateColumns="False" Margin="6,0,6,6"
                       ItemsSource="{Binding Path=SelectedDirectory.FileListViewModel}"
-                      SelectedItem="{Binding Path=SelectedDirectory.FileListViewModel.Selected}" >
+                      SelectedItem="{Binding Path=SelectedDirectory.FileListViewModel.Selected}"
+                      >
                 <DataGrid.Resources>
                     <ResourceDictionary>
                         <SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}" Color="NavajoWhite"/>
@@ -89,7 +101,9 @@
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
+                    <DataGridTextColumn Header="#" Binding="{Binding Path=RowIndex}"></DataGridTextColumn>
                     <DataGridTextColumn Header="File Name" Binding="{Binding Path=Label}"></DataGridTextColumn>
+                    <DataGridTextColumn Header="Path" Binding="{Binding Path=FilePath}"></DataGridTextColumn>
                 </DataGrid.Columns>
 
             </DataGrid>

@@ -8,21 +8,22 @@ namespace MyMemory.Domain
     public class PlaylistState : IPlaylistState
     {
 
-        public PlaylistState() : this(null, 0) { }
+        public PlaylistState() : this(null, string.Empty) { }
 
 
-        public PlaylistState(IEnumerable<FileResource> resources) : this(resources, 0) { }
+        public PlaylistState(IEnumerable<FileResource> resources) : this(resources, string.Empty) { }
 
 
-        public PlaylistState(IEnumerable<INameableResource> resources, int index)
+        public PlaylistState(IEnumerable<INameableResource> resources, string selectedItemId)
         {
             Resources = resources;
-            Index = index;
+            SelectedItemId = selectedItemId;
         }
 
 
         public bool IsEmpty => Resources == null || !Resources.Any();
-        public int Index { get; set; }
+
+        public string SelectedItemId { get; set; }
 
         public IEnumerable<INameableResource> Resources { get; set; }
     }

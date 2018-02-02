@@ -1,4 +1,7 @@
-﻿namespace MyMemory.Domain
+﻿using System;
+
+
+namespace MyMemory.Domain
 {
 
     public class PlaylistItem : IPlaylistItem
@@ -7,11 +10,17 @@
         private readonly IPlaylistItemPlayer _player;
 
 
-        public PlaylistItem(string name, IPlaylistItemPlayer player, string resourcePath)
+        public PlaylistItem()
+        { }
+
+
+        public PlaylistItem(IPlaylistItemPlayer player, string id, string name, string path)
         {
             Name = name;
+            Path = path;
+            Id = id;
+
             _player = player;
-            Path = resourcePath;
         }
 
 
@@ -27,7 +36,14 @@
         }
 
 
+        public bool IsEqual(string id)
+        {
+            return string.Equals(Id, id, StringComparison.InvariantCultureIgnoreCase);
+        }
+
+
         public string Name { get; set; }
         public string Path { get; set; }
+        public string Id { get; set; }
     }
 }

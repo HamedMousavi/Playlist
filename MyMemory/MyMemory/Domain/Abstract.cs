@@ -9,6 +9,9 @@ namespace MyMemory.Domain
     {
         string Name { get; }
         string Path { get; }
+        string Id { get; }
+
+        bool IsEqual(string id); // Check if resource id matches passed id
     }
 
     public interface ISerializer<TOut>
@@ -49,16 +52,17 @@ namespace MyMemory.Domain
 
     public interface IPlaylist
     {
-        IPlaylistItem Current();
-        IPlaylistItem Next();
-        IPlaylistItem Prev();
+        bool IsEmpty { get; }
 
-        int IndexOf(IPlaylistItem item);
+        IPlaylistItem ActiveItem { get; set; }
+        IPlaylistItem Next { get; }
+        IPlaylistItem Prev { get; }
+
+        IPlaylistItem FindById(string itemId);
 
         event EventHandler WhenLoaded;
         event EventHandler WhenPlayed;
-
-        bool IsEmpty { get; }
+        event EventHandler WhenActiveItemChanged;
 
         void Save();
         void Save(IPlaylistSaver saver);
@@ -78,7 +82,7 @@ namespace MyMemory.Domain
     {
         bool IsEmpty { get; }
 
-        int Index { get; }
+        string SelectedItemId { get; }
 
         IEnumerable<INameableResource> Resources { get; }
     }

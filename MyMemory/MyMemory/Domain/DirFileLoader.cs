@@ -32,8 +32,7 @@ namespace MyMemory.Domain
                 Directory
                 .EnumerateFiles(_dirPath, "*.*", SearchOption.AllDirectories)
                 .Select(p => new FileResource(p))
-                .ToList(),
-                0);
+                .ToList());
         }
     }
 }

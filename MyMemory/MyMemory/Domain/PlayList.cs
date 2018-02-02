@@ -12,11 +12,55 @@ namespace MyMemory.Domain
         private readonly IPlaylistLoader _loader;
         private readonly IPlaylistSaver _saver;
         private readonly IPlaylistItemPlayer _itemPlayer;
+
         private List<IPlaylistItem> _list;
+        private IPlaylistItem _activeItem;
 
         public bool IsEmpty => _list == null || !_list.Any();
         public int Count => IsEmpty ? 0 : _list.Count;
-        public int SelectedIndex { get; private set; }
+
+        public IPlaylistItem ActiveItem
+        {
+            get
+            {
+                if (IsEmpty) Load();
+                if (_activeItem == null && !IsEmpty) _activeItem = _list[0];
+
+                return _activeItem;
+            }
+            set
+            {
+                if (_activeItem == value) return;
+
+                _activeItem = value;
+                Save();
+                OnWhenActiveItemChanged();
+            }
+        }
+
+
+        public IPlaylistItem Next
+        {
+            get
+            {
+                if (ActiveItem != null)
+                    ActiveItem = _list[NormalizeIndex(_list.IndexOf(_activeItem) + 1)];
+
+                return ActiveItem;
+            }
+        }
+
+
+        public IPlaylistItem Prev
+        {
+            get
+            {
+                if (ActiveItem != null)
+                    ActiveItem = _list[NormalizeIndex(_list.IndexOf(_activeItem) - 1)];
+
+                return ActiveItem;
+            }
+        }
 
 
         public Playlist(IPlaylistLoader loader, IPlaylistSaver saver, IPlaylistItemPlayer itemPlayer)
@@ -24,40 +68,15 @@ namespace MyMemory.Domain
             _loader = loader;
             _saver = saver;
             _itemPlayer = itemPlayer;
-            SelectedIndex = 0;
+            _activeItem = null;
 
             _itemPlayer.WhenPlayed += (sender, args) => OnWhenPlayed();
         }
 
 
-        private IPlaylistItem Find(int index)
-        {
-            if (IsEmpty)
-            {
-                Load();
-                if (IsEmpty) return null;
-                index = SelectedIndex;
-            }
-
-            if (index >= _list.Count || index < 0)
-            {
-                Load();
-                index = 0;
-            }
-
-            if (SelectedIndex != index)
-            {
-                SelectedIndex = index;
-                Save();
-            }
-
-            return _list[index];
-        }
-
-
         protected virtual IPlaylistState GetState()
         {
-            return new PlaylistState(_list, SelectedIndex);
+            return new PlaylistState(_list, _activeItem?.Id);
         }
 
 
@@ -66,7 +85,7 @@ namespace MyMemory.Domain
             if (state == null) return;
 
             _list = state.Resources.Select(CreateItem).ToList();
-            SelectedIndex = state.Index;
+            _activeItem = FindById(state.SelectedItemId);
 
             OnWhenLoaded();
         }
@@ -74,31 +93,19 @@ namespace MyMemory.Domain
 
         protected virtual IPlaylistItem CreateItem(INameableResource resource)
         {
-            return new PlaylistItem(resource.Name, _itemPlayer, resource.Path);
+            return new PlaylistItem(
+                _itemPlayer,
+                resource.Id,
+                resource.Name,
+                resource.Path);
         }
 
 
-        public IPlaylistItem Current()
+        public IPlaylistItem FindById(string itemId)
         {
-            return Find(SelectedIndex);
-        }
-
-
-        public IPlaylistItem Next()
-        {
-            return Find(SelectedIndex + 1);
-        }
-
-
-        public IPlaylistItem Prev()
-        {
-            return Find(SelectedIndex - 1);
-        }
-
-
-        public int IndexOf(IPlaylistItem item)
-        {
-            return IsEmpty ? -1 : _list.IndexOf(item);
+            return _list?.SingleOrDefault(item =>
+                item != null && string.Equals(item.Id,
+                itemId, StringComparison.InvariantCultureIgnoreCase));
         }
 
 
@@ -126,8 +133,20 @@ namespace MyMemory.Domain
         }
 
 
+        private int NormalizeIndex(int index)
+        {
+            if (index < 0) index = 0;
+            if (index >= _list.Count) index = _list.Count - 1;
+
+            return index;
+        }
+
+
+        #region Events
+
         public event EventHandler WhenLoaded;
         public event EventHandler WhenPlayed;
+        public event EventHandler WhenActiveItemChanged;
 
         protected virtual void OnWhenLoaded()
         {
@@ -136,7 +155,12 @@ namespace MyMemory.Domain
 
         protected virtual void OnWhenPlayed()
         {
-            WhenPlayed?.Invoke(this, !IsEmpty ? new ItemEventArgs(_list[SelectedIndex]) : EventArgs.Empty);
+            WhenPlayed?.Invoke(this, !IsEmpty ? new ItemEventArgs(_activeItem) : EventArgs.Empty);
+        }
+
+        protected virtual void OnWhenActiveItemChanged()
+        {
+            WhenActiveItemChanged?.Invoke(this, !IsEmpty ? new ItemEventArgs(_activeItem) : EventArgs.Empty);
         }
 
         public class ItemEventArgs : EventArgs
@@ -148,5 +172,7 @@ namespace MyMemory.Domain
 
             public IPlaylistItem Item { get; }
         }
+
+        #endregion Events
     }
 }

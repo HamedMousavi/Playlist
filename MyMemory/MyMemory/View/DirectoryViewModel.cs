@@ -1,24 +1,41 @@
 ﻿using System.ComponentModel;
+using System.Diagnostics;
 using System.Runtime.CompilerServices;
+using System.Windows.Input;
 using MyMemory.Annotations;
 using MyMemory.Domain;
+
 
 namespace MyMemory
 {
 
     public class DirectoryViewModel : INotifyPropertyChanged
     {
+
         public string Name
         {
             get => _name;
             set { _name = value; OnPropertyChanged(); }
         }
+
+
         public string Path
         {
             get => _path;
             set { _path = value; OnPropertyChanged(); }
         }
+
+
         public PlayableList FileListViewModel => LoadPlaylist();
+
+
+        public ICommand OpenDirectoryCommand => new RelayCommand(a => Process.Start(new ProcessStartInfo
+        {
+            FileName = Path,
+            UseShellExecute = true,
+            Verb = "open"
+        }));
+
 
         private PlayableList LoadPlaylist()
         {
@@ -33,6 +50,7 @@ namespace MyMemory
                 _playlist = new Playlist(loader, cache, new FilePlayer());
                 _playlist.WhenLoaded += (sender, args) => WhenDirectoryLoaded();
                 _playlist.WhenPlayed += (sender, args) => WhenFilePlayed(((Playlist.ItemEventArgs)args).Item);
+                _playlist.WhenActiveItemChanged += (sender, args) => WhenActiveFileChanged(((Playlist.ItemEventArgs)args).Item);
                 _playlist.Load();
             }
 
@@ -52,11 +70,20 @@ namespace MyMemory
         private string _path;
 
 
+        private void WhenActiveFileChanged(IPlaylistItem item)
+        {
+            // Update playlist
+            var active = _filesViewModel.SetActive(item);
+            AppStatus.Instance.Info($"Selected {item}", $"({active?.RowIndex}/{_playlist.Count})");
+            OnPropertyChanged(nameof(FileListViewModel));
+        }
+
+
         private void WhenFilePlayed(IPlaylistItem item)
         {
             // Update playlist
-            _filesViewModel.Select(_playlist.IndexOf(item));
-            AppStatus.Instance.Info($"Playing {item}", $"{_playlist.SelectedIndex + 1}/{_playlist.Count})");
+            var active = _filesViewModel.SetActive(item);
+            AppStatus.Instance.Info($"Playing {item}", $"({active?.RowIndex}/{_playlist.Count})");
             OnPropertyChanged(nameof(FileListViewModel));
         }
 
@@ -65,24 +92,30 @@ namespace MyMemory
         {
             // Update playlist
             _playlist.Save(_filesViewModel);
-            AppStatus.Instance.Info("", $"{_playlist.SelectedIndex + 1}/{_playlist.Count})");
+            AppStatus.Instance.Info("", $"({_playlist.Count})");
             OnPropertyChanged(nameof(FileListViewModel));
         }
 
-        public void PlayPreviousFile()
+        public IPlaylistItem PreviousFile()
         {
-            _playlist.Prev()?.Play();
+            return _playlist.Prev;
         }
 
-        public void PlayCurrentFile()
+        public IPlaylistItem ActiveFile()
         {
-            _playlist.Current()?.Play();
+            return _playlist.ActiveItem;
         }
 
-        public void PlayNextFile()
+        public IPlaylistItem NextFile()
         {
-            _playlist.Next()?.Play();
+            return _playlist.Next;
         }
+
+        public void SelectFile()
+        {
+            _playlist.ActiveItem = _playlist.FindById(FileListViewModel.Selected.Id);
+        }
+
 
         #region PropertyChanged
 

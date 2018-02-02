@@ -39,6 +39,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -59,6 +60,8 @@
     </ApplicationDefinition>
     <Compile Include="Domain\DirectoryList.cs" />
     <Compile Include="Domain\FileResource.cs" />
+    <Compile Include="PathUtil.cs" />
+    <Compile Include="StandarWindowsDialogs.cs" />
     <Compile Include="View\AddDirectory.xaml.cs">
       <DependentUpon>AddDirectory.xaml</DependentUpon>
     </Compile>
@@ -124,12 +127,8 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="HLib\HLib.csproj">
-      <Project>{54110341-2671-4cc8-90bb-4e127370d22d}</Project>
-      <Name>HLib</Name>
-    </ProjectReference>
+    <Resource Include="Images\dir.png" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <Resource Include="Images\resultset_next.png" />
   </ItemGroup>
