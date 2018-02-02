@@ -8,26 +8,21 @@ namespace MyMemory.View
     public class Directories : ObservableCollection<DirectoryViewModel>, IPlaylistContainerSaver
     {
 
-        internal DirectoryViewModel Add(string dirTitle, string dirPath)
-        {
-            var dir = new DirectoryViewModel { Name = dirTitle, Path = dirPath };
-
-            Add(dir);
-
-            return dir;
-        }
-
         public void Save(IPlaylistContainerState state)
         {
             Clear();
+            if (state?.Items == null) return;
 
-            if (state?.Items != null)
+            foreach (var item in state.Items)
             {
-                foreach (var item in state.Items)
-                {
-                    Add(item.Name, item.Path);
-                }
+                Add(CreateViewModel(item.Name, item.Path));
             }
+        }
+
+
+        public DirectoryViewModel CreateViewModel(string dirTitle, string dirPath)
+        {
+            return new DirectoryViewModel { Name = dirTitle, Path = dirPath };
         }
     }
 }
