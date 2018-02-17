@@ -7,7 +7,7 @@
     <ProjectGuid>{07ABC853-AE3C-4857-9E7E-3DA43F0C6102}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <RootNamespace>MyMemory</RootNamespace>
-    <AssemblyName>MyMemory</AssemblyName>
+    <AssemblyName>Playlist</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -32,6 +32,9 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>playlist.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Grace, Version=6.3.1.0, Culture=neutral, PublicKeyToken=b7d24c6367970497, processorArchitecture=MSIL">
@@ -91,6 +94,8 @@
     <Compile Include="Domain\Abstract\Common.cs" />
     <Compile Include="View\RelayCommand.cs" />
     <Compile Include="View\SelectedPlayListItemConverter.cs" />
+    <Compile Include="WindowPlacement.cs" />
+    <Compile Include="WindowPlacementStore.cs" />
     <Page Include="View\AddDirectory.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -143,6 +148,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\resultset_next.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="playlist.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

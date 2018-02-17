@@ -97,21 +97,6 @@ namespace MyMemory
             OnPropertyChanged(nameof(FileListViewModel));
         }
 
-        public IPlaylistItem PreviousFile()
-        {
-            return _playlist.Prev;
-        }
-
-        public IPlaylistItem ActiveFile()
-        {
-            return _playlist.ActiveItem;
-        }
-
-        public IPlaylistItem NextFile()
-        {
-            return _playlist.Next;
-        }
-
         public void SelectFile()
         {
             _playlist.ActiveItem = _playlist.FindById(FileListViewModel.Selected.Id);
@@ -129,5 +114,51 @@ namespace MyMemory
         }
 
         #endregion PropertyChanged
+
+
+        public bool CanPlayPrevious()
+        {
+            return _playlist != null && !_playlist.IsEmpty && _playlist.Prev != null;
+        }
+
+
+        public void PlayPrevious()
+        {
+            var prev = _playlist?.Prev;
+            if (prev != null)
+            {
+                _playlist.ActiveItem = prev;
+                prev.Play();
+            }
+        }
+
+
+        public bool CanPlayActive()
+        {
+            return _playlist != null && !_playlist.IsEmpty && _playlist.ActiveItem != null;
+        }
+
+
+        public void PlayActive()
+        {
+            _playlist?.ActiveItem?.Play();
+        }
+
+
+        public bool CanPlayNext()
+        {
+            return _playlist != null && !_playlist.IsEmpty && _playlist.Next != null;
+        }
+
+
+        public void PlayNext()
+        {
+            var next = _playlist?.Next;
+            if (next != null)
+            {
+                _playlist.ActiveItem = next;
+                next.Play();
+            }
+        }
     }
 }

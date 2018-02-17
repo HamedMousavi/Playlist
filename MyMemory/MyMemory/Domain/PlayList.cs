@@ -20,15 +20,11 @@ namespace MyMemory.Domain
         public bool IsEmpty => _list == null || !_list.Any();
         public int Count => IsEmpty ? 0 : _list.Count;
 
+        public IPlaylistItem Next => ActiveItem != null ? _list[NormalizeIndex(_list.IndexOf(_activeItem) + 1)] : null;
+        public IPlaylistItem Prev => ActiveItem != null ? _list[NormalizeIndex(_list.IndexOf(_activeItem) - 1)] : null;
         public IPlaylistItem ActiveItem
         {
-            get
-            {
-                if (IsEmpty) Load();
-                if (_activeItem == null && !IsEmpty) _activeItem = _list[0];
-
-                return _activeItem;
-            }
+            get => _activeItem;
             set
             {
                 if (_activeItem == value) return;
@@ -36,30 +32,6 @@ namespace MyMemory.Domain
                 _activeItem = value;
                 Save();
                 OnWhenActiveItemChanged();
-            }
-        }
-
-
-        public IPlaylistItem Next
-        {
-            get
-            {
-                if (ActiveItem != null)
-                    ActiveItem = _list[NormalizeIndex(_list.IndexOf(_activeItem) + 1)];
-
-                return ActiveItem;
-            }
-        }
-
-
-        public IPlaylistItem Prev
-        {
-            get
-            {
-                if (ActiveItem != null)
-                    ActiveItem = _list[NormalizeIndex(_list.IndexOf(_activeItem) - 1)];
-
-                return ActiveItem;
             }
         }
 
