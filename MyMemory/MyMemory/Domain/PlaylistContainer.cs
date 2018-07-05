@@ -20,6 +20,7 @@ namespace MyMemory.Domain
         public void Load(IPlaylistContainerLoader loader)
         {
             _directories = loader.Load()?.Items;
+            _directories.Sort();
         }
 
 
