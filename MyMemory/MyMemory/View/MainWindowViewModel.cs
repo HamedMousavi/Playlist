@@ -45,6 +45,7 @@ namespace MyMemory
         }
 
 
+        public ICommand PlaySelectedCommand => new RelayCommand(a => SelectedDirectory?.PlaySelected(), a => SelectedDirectory != null && SelectedDirectory.CanPlaySelected());
         public ICommand AddDirectoryCommand => new RelayCommand(WhenAddDirectoryButtonClicked);
         public ICommand PlayPreviousCommand => new RelayCommand(a => SelectedDirectory?.PlayPrevious(), a => SelectedDirectory != null && SelectedDirectory.CanPlayPrevious());
         public ICommand PlayCurrentCommand => new RelayCommand(a => SelectedDirectory?.PlayActive(), a => SelectedDirectory != null && SelectedDirectory.CanPlayActive());
@@ -55,8 +56,21 @@ namespace MyMemory
         public DirectoryViewModel SelectedDirectory
         {
             get => _selectedDirectory;
-            set { _selectedDirectory = value; OnPropertyChanged(); }
+            set
+            {
+                _selectedDirectory = value;
+                OnPropertyChanged();
+                OnPropertyChanged("PlayListViewModel");
+            }
         }
+
+        public Playable SelectedPlayableViewModel
+        {
+            get { return SelectedDirectory?.FileListViewModel.Selected; }
+            set { SelectedDirectory.FileListViewModel.Selected = value; }
+        }
+
+        public PlayableList PlayListViewModel => SelectedDirectory?.FileListViewModel;
 
 
         private void WhenAddDirectoryButtonClicked(object[] args)

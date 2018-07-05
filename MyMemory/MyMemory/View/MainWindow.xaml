@@ -69,9 +69,11 @@
                       IsReadOnly="True" CanUserAddRows="False"
                       SelectionMode="Single" SelectionUnit="FullRow" 
                       AutoGenerateColumns="False" Margin="6,0,6,6"
-                      ItemsSource="{Binding Path=SelectedDirectory.FileListViewModel}"
-                      SelectedItem="{Binding Path=SelectedDirectory.FileListViewModel.Selected}"
-                      >
+                      ItemsSource="{Binding Path=PlayListViewModel, Mode=OneWay}"
+                      SelectedItem="{Binding Path=SelectedPlayableViewModel}">
+                <DataGrid.InputBindings>
+                    <MouseBinding MouseAction="LeftDoubleClick" Command="{Binding PlaySelectedCommand}" />
+                </DataGrid.InputBindings>
                 <DataGrid.Resources>
                     <ResourceDictionary>
                         <SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}" Color="NavajoWhite"/>

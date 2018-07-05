@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
@@ -56,6 +57,22 @@ namespace MyMemory
             }
 
             return _filesViewModel;
+        }
+
+
+        internal bool CanPlaySelected()
+        {
+            return _playlist != null
+                && !_playlist.IsEmpty
+                && _filesViewModel != null
+                && _filesViewModel.Selected != null;
+        }
+
+
+        internal void PlaySelected()
+        {
+            // FileListViewModel.Selected
+            _playlist.FindById(_filesViewModel.Selected.Id).Play();
         }
 
 
