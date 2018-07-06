@@ -31,7 +31,7 @@
 
             <!--<Separator DockPanel.Dock="Right" />-->
             <StatusBarItem Margin="0" Padding="0" DockPanel.Dock="Right">
-                <StackPanel Margin="0" Orientation="Horizontal">
+                <StackPanel Margin="0" Orientation="Horizontal" Background="WhiteSmoke">
                     <Label Content="At"></Label>
                     <Label Content="{Binding Path=Status.Count}"></Label>
                 </StackPanel>
