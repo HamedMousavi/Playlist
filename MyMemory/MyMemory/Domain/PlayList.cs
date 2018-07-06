@@ -19,9 +19,10 @@ namespace MyMemory.Domain
 
         public bool IsEmpty => _list == null || !_list.Any();
         public int Count => IsEmpty ? 0 : _list.Count;
+        public int ActiveIndex => ActiveItem == null ? 0 : _list.IndexOf(_activeItem);
 
-        public IPlaylistItem Next => ActiveItem != null ? _list[NormalizeIndex(_list.IndexOf(_activeItem) + 1)] : null;
-        public IPlaylistItem Prev => ActiveItem != null ? _list[NormalizeIndex(_list.IndexOf(_activeItem) - 1)] : null;
+        public IPlaylistItem Next => ActiveItem == null ? null : _list[NormalizeIndex(ActiveIndex + 1)];
+        public IPlaylistItem Prev => ActiveItem == null ? null : _list[NormalizeIndex(ActiveIndex - 1)];
         public IPlaylistItem ActiveItem
         {
             get => _activeItem;

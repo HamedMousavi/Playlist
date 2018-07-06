@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using MyMemory.Domain.Abstract;
 
 
@@ -7,9 +9,9 @@ namespace MyMemory.Domain
 
     public class PlaylistContainer : IPlaylistContainer
     {
-        
+
         private List<DirectoryItem> _directories;
-        
+
 
         public void Save(IPlaylistContainerSaver saver)
         {
@@ -28,6 +30,13 @@ namespace MyMemory.Domain
         {
             if (_directories == null) _directories = new List<DirectoryItem>();
             _directories.Add(new DirectoryItem(dirTitle, dirPath));
+        }
+
+
+        internal void Remove(string path)
+        {
+            var found = _directories.SingleOrDefault(d => string.Equals(d.Path, path, StringComparison.InvariantCultureIgnoreCase));
+            if (found != null) _directories.Remove(found);
         }
     }
 }

@@ -7,6 +7,24 @@
         mc:Ignorable="d"
         Name="WndMain"
         Title="Watched" Height="600" Width="800">
+    <Window.Resources>
+        <ResourceDictionary>
+            <Style x:Key="LessBlurryImage" TargetType="Image">
+                <Setter Property="RenderOptions.BitmapScalingMode" Value="HighQuality"></Setter>
+                <!--<Setter Property="RenderOptions.EdgeMode" Value="Aliased"></Setter>-->
+                <Setter Property="SnapsToDevicePixels" Value="True"></Setter>
+                <Setter Property="HorizontalAlignment" Value="Center"></Setter>
+                <Setter Property="VerticalAlignment" Value="Center"></Setter>
+            </Style>
+            <BitmapImage x:Key="AddDirectoryIcon" UriSource="pack://application:,,,/Images/Folder-Add-01.png" />
+            <BitmapImage x:Key="RemoveDirectoryIcon" UriSource="pack://application:,,,/Images/Folder-Delete-01.png" />
+            <BitmapImage x:Key="PlayNextIcon" UriSource="pack://application:,,,/Images/Media Forward-WF.png" />
+            <BitmapImage x:Key="PlayPrevIcon" UriSource="pack://application:,,,/Images/Media Back-WF.png" />
+            <BitmapImage x:Key="PlayCurrIcon" UriSource="pack://application:,,,/Images/Media Play2-WF.png" />
+            <BitmapImage x:Key="SetCurrIcon" UriSource="pack://application:,,,/Images/Bookmark Down-WF.png" />
+            <BitmapImage x:Key="FolderIcon" UriSource="pack://application:,,,/Images/Folder-Find-01.png" />
+        </ResourceDictionary>
+    </Window.Resources>
     <DockPanel LastChildFill="True">
 
         <StatusBar DockPanel.Dock="Bottom">
@@ -21,16 +39,14 @@
             <Separator DockPanel.Dock="Right" />
 
             <StatusBarItem Margin="0" Padding="0" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch">
-                <Label Margin="0" 
-                        Padding="0"
-                        Name="StatusLabel" 
-                        Content="{Binding Status.Message}" />
+                <TextBlock Margin="0" Padding="2" x:Name="StatusLabel" Text="{Binding Status.Message}"
+                        FontWeight="Bold" VerticalAlignment="Center" />
             </StatusBarItem>
         </StatusBar>
 
         <Grid>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="1*" />
+                <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="5*" />
             </Grid.ColumnDefinitions>
@@ -38,32 +54,62 @@
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
-            <Label Grid.Row="0" Grid.Column="0" Padding="6" Margin="6">Directories</Label>
-            <Button Grid.Row="0" Grid.Column="1" Padding="10,0,10,0" Margin="6" Command="{Binding AddDirectoryCommand}" CommandParameter="{Binding ElementName=WndMain}">+</Button>
-            <ListBox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Margin="6,0,6,6" 
+            <TextBlock Grid.Row="0" Grid.Column="0" Padding="6" Margin="6" FontWeight="Bold" Text="{Binding Path=DirectoriesDetail, Mode=OneWay}"></TextBlock>
+            <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal" Margin="6" HorizontalAlignment="Right">
+                <Button Padding="2" Margin="5, 0" Width="32" Height="32" BorderThickness="0" ToolTip="Add New Directory To List"
+                    Command="{Binding AddDirectoryCommand}" CommandParameter="{Binding ElementName=WndMain}" Cursor="Hand" Background="Transparent">
+                    <Image Style="{StaticResource LessBlurryImage}" Source="{StaticResource AddDirectoryIcon}" />
+                </Button>
+                <Button Padding="2" Margin="0" Width="32" Height="32" BorderThickness="0" ToolTip="Remove Selected Directory From List"
+                    Command="{Binding RemoveDirectoryCommand}" CommandParameter="{Binding ElementName=WndMain}" Cursor="Hand" Background="Transparent">
+                    <Image Style="{StaticResource LessBlurryImage}" Source="{StaticResource RemoveDirectoryIcon}" />
+                </Button>
+            </StackPanel>
+            <ListBox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Margin="6,0,6,6" Padding="0"
                      ItemsSource="{Binding Directories}" SelectedItem="{Binding SelectedDirectory}"
-                     HorizontalContentAlignment="Stretch">
+                     HorizontalContentAlignment="Stretch" Background="WhiteSmoke" VerticalContentAlignment="Stretch">
                 <ListBox.ItemTemplate>
                     <DataTemplate DataType="local:DirectoryViewModel">
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto" />
-                                <ColumnDefinition Width="*" />
-                            </Grid.ColumnDefinitions>
-                            <Button Grid.Column="0" Command="{Binding OpenDirectoryCommand}" Margin="6,2,6,2" Background="Transparent" BorderThickness="0" BorderBrush="Transparent">
-                                <Image MaxWidth="24" MaxHeight="24" Source="../Images/dir.png"></Image>
-                            </Button>
-                            <Label Grid.Column="1" Content="{Binding Name}" />
-                        </Grid>
+                        <Border Padding="1" Margin="1" MinHeight="50"
+                                BorderThickness="1" BorderBrush="LightGray" >
+                            <Grid Margin="0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="*" />
+                                    <RowDefinition Height="Auto" />
+                                </Grid.RowDefinitions>
+                                <Button Grid.Row="0" Grid.Column="0" Command="{Binding OpenDirectoryCommand}"
+                                        Margin="6,6,6,0" Padding="0" Background="Transparent" BorderThickness="0" BorderBrush="Transparent"
+                                        Cursor="Hand" ToolTip="Open Containing Directory">
+                                    <!--<Image MaxWidth="24" MaxHeight="24" Source="../Images/dir.png"></Image>-->
+                                    <Image MaxWidth="24" MaxHeight="24" Margin="0" Style="{StaticResource LessBlurryImage}" Source="{StaticResource FolderIcon}" />
+                                </Button>
+                                <Label Grid.Row="0" Grid.Column="1" Content="{Binding Name}" VerticalAlignment="Stretch" VerticalContentAlignment="Center" />
+                                <ProgressBar  Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" MaxHeight="3" MinHeight="3"
+                                          Value="{Binding Path=Progress, Mode=OneWay}" Minimum="0" Maximum="100"
+                                          BorderThickness="0" Visibility="{Binding IsProgressBarVisible}" />
+                            </Grid>
+                        </Border>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>
             <StackPanel Grid.Row="0" Grid.Column="2" Orientation="Horizontal">
-                <Label Margin="6">Files</Label>
-                <Button Padding="10,0,10,0" Margin="6" Command="{Binding PlayPreviousCommand}">Play Previous</Button>
-                <Button Padding="10,0,10,0" Margin="6" Command="{Binding PlayCurrentCommand}">Play Current</Button>
-                <Button Padding="10,0,10,0" Margin="6" Command="{Binding PlayNextCommand}">Play Next</Button>
-                <Button Padding="10,0,10,0" Margin="6" Command="{Binding SetIndexCommand}">Set As Current</Button>
+                <TextBlock Padding="6" Margin="6" Text="{Binding Path=FilesDetails, Mode=OneWay}" FontWeight="Bold"></TextBlock>
+                <Button Padding="2" Margin="6" Width="32" Height="32" Command="{Binding PlayPreviousCommand}" BorderThickness="0" ToolTip="Play Previous" Cursor="Hand" Background="Transparent">
+                    <Image Style="{StaticResource LessBlurryImage}" Source="{StaticResource PlayPrevIcon}" />
+                </Button>
+                <Button Padding="2" Margin="6" Width="32" Height="32" Command="{Binding PlayCurrentCommand}" BorderThickness="0" ToolTip="Play Bookmark" Cursor="Hand" Background="Transparent">
+                    <Image Style="{StaticResource LessBlurryImage}" Source="{StaticResource PlayCurrIcon}" />
+                </Button>
+                <Button Padding="2" Margin="6" Width="32" Height="32" Command="{Binding PlayNextCommand}" BorderThickness="0" ToolTip="Play Next" Cursor="Hand" Background="Transparent">
+                    <Image Style="{StaticResource LessBlurryImage}" Source="{StaticResource PlayNextIcon}" />
+                </Button>
+                <Button Padding="2" Margin="6" Width="32" Height="32" Command="{Binding SetIndexCommand}" BorderThickness="0" ToolTip="Bookmark Selected File" Cursor="Hand" Background="Transparent">
+                    <Image Style="{StaticResource LessBlurryImage}" Source="{StaticResource SetCurrIcon}" />
+                </Button>
             </StackPanel>
             <DataGrid Grid.Row="1" Grid.Column="2" Name="FileListDataGrid" Visibility="Visible"
                       IsReadOnly="True" CanUserAddRows="False"

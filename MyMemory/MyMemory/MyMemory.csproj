@@ -144,13 +144,19 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\dir.png" />
+    <Resource Include="playlist.ico" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\resultset_next.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="playlist.ico" />
+    <Resource Include="Images\Bookmark Down-WF.png" />
+    <Resource Include="Images\Folder-Add-01.png" />
+    <Resource Include="Images\Folder-Delete-01.png" />
+    <Resource Include="Images\Folder-Find-01.png" />
+    <Resource Include="Images\Media Back-WF.png" />
+    <Resource Include="Images\Media Forward-WF.png" />
+    <Resource Include="Images\Media Play2-WF.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

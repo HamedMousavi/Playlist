@@ -28,6 +28,12 @@ namespace MyMemory
         }
 
 
+        public Playable GetActive()
+        {
+            return _playing;
+        }
+
+
         public void Save(IPlaylistState playlist)
         {
             Clear();

@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 
 
 namespace MyMemory
@@ -8,6 +9,7 @@ namespace MyMemory
     {
 
         private WindowPlacementManager _placement;
+        private bool _scrolling;
 
 
         public MainWindow(MainWindowViewModel dataContext)
@@ -17,6 +19,29 @@ namespace MyMemory
             DataContext = dataContext;
 
             TrackWindowSizeAndPosition();
+
+            dataContext.PropertyChanged += MainWindowViewModelPropertyChanged;
+        }
+
+
+        private void MainWindowViewModelPropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            if (string.Equals(e.PropertyName, nameof(MainWindowViewModel.SelectedPlayableViewModel), System.StringComparison.InvariantCultureIgnoreCase))
+            {
+                var selection = ((MainWindowViewModel)DataContext).SelectedPlayableViewModel;
+                ScrollToSelection(selection);
+            }
+        }
+
+
+        private void ScrollToSelection(Playable selection)
+        {
+            _scrolling = true;
+
+            FileListDataGrid.UpdateLayout();
+            FileListDataGrid.ScrollIntoView(selection);
+
+            _scrolling = false;
         }
 
 
@@ -31,7 +56,7 @@ namespace MyMemory
         {
             // Prevent autoscroll uppon cell selections
             // Such an stupid smart idea
-            e.Handled = true;
+            if (!_scrolling) e.Handled = true;
         }
     }
 }

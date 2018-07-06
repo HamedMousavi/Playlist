@@ -45,8 +45,11 @@ namespace MyMemory
         }
 
 
+        public string DirectoriesDetail => $"Directories ({(Directories == null ? 0 : Directories.Count)})";
+        public string FilesDetails => $"Files ({(PlayListViewModel == null ? 0 : PlayListViewModel.Count)})";
         public ICommand PlaySelectedCommand => new RelayCommand(a => SelectedDirectory?.PlaySelected(), a => SelectedDirectory != null && SelectedDirectory.CanPlaySelected());
         public ICommand AddDirectoryCommand => new RelayCommand(WhenAddDirectoryButtonClicked);
+        public ICommand RemoveDirectoryCommand => new RelayCommand(WhenRemoveDirectoryButtonClicked, a => SelectedDirectory != null);
         public ICommand PlayPreviousCommand => new RelayCommand(a => SelectedDirectory?.PlayPrevious(), a => SelectedDirectory != null && SelectedDirectory.CanPlayPrevious());
         public ICommand PlayCurrentCommand => new RelayCommand(a => SelectedDirectory?.PlayActive(), a => SelectedDirectory != null && SelectedDirectory.CanPlayActive());
         public ICommand PlayNextCommand => new RelayCommand(a => SelectedDirectory?.PlayNext(), a => SelectedDirectory != null && SelectedDirectory.CanPlayNext());
@@ -60,14 +63,25 @@ namespace MyMemory
             {
                 _selectedDirectory = value;
                 OnPropertyChanged();
-                OnPropertyChanged("PlayListViewModel");
+                OnPropertyChanged(nameof(PlayListViewModel));
+                OnPropertyChanged(nameof(FilesDetails));
+
+                if (_selectedDirectory != null &&
+                    _selectedDirectory.FileListViewModel != null)
+                {
+                    var active = _selectedDirectory.FileListViewModel.GetActive();
+                    if (active != null)
+                    {
+                        SelectedPlayableViewModel = active;
+                    }
+                }
             }
         }
 
         public Playable SelectedPlayableViewModel
         {
             get { return SelectedDirectory?.FileListViewModel.Selected; }
-            set { SelectedDirectory.FileListViewModel.Selected = value; }
+            set { SelectedDirectory.FileListViewModel.Selected = value; OnPropertyChanged(); }
         }
 
         public PlayableList PlayListViewModel => SelectedDirectory?.FileListViewModel;
@@ -76,6 +90,16 @@ namespace MyMemory
         private void WhenAddDirectoryButtonClicked(object[] args)
         {
             CreateAddDirectoryWindow(args?[0] as Window).Show();
+        }
+
+
+        private void WhenRemoveDirectoryButtonClicked(object[] args)
+        {
+            _playlistContainer.Remove(SelectedDirectory?.Path);
+            _playlistContainer.Save(_playlistContainerStore);
+            _playlistContainer.Save(Directories);
+            SelectedDirectory = null;
+            OnPropertyChanged(nameof(DirectoriesDetail));
         }
 
 
@@ -93,6 +117,7 @@ namespace MyMemory
         {
             SaveAddedPlaylist(dirTitle, dirPath);
             SelectAddedPlaylistInUi(dirTitle, dirPath);
+            OnPropertyChanged(nameof(DirectoriesDetail));
         }
 
 

@@ -28,6 +28,11 @@ namespace MyMemory
         }
 
 
+        public System.Windows.Visibility IsProgressBarVisible { get; private set; }
+
+        public int Progress { get; private set; }
+
+
         public PlayableList FileListViewModel => LoadPlaylist();
 
 
@@ -79,6 +84,7 @@ namespace MyMemory
         public DirectoryViewModel()
         {
             _filesViewModel = new PlayableList();
+            SetProgress();
         }
 
 
@@ -94,6 +100,7 @@ namespace MyMemory
             var active = _filesViewModel.SetActive(item);
             AppStatus.Instance.Info($"Selected {item}", $"({active?.RowIndex}/{_playlist.Count})");
             OnPropertyChanged(nameof(FileListViewModel));
+            SetProgress();
         }
 
 
@@ -112,7 +119,23 @@ namespace MyMemory
             _playlist.Save(_filesViewModel);
             AppStatus.Instance.Info("", $"({_playlist.Count})");
             OnPropertyChanged(nameof(FileListViewModel));
+
+            SetProgress();
         }
+
+
+        private void SetProgress()
+        {
+            if (_playlist != null)
+            {
+                Progress = _playlist.ActiveIndex * 100 / _playlist.Count;
+                OnPropertyChanged(nameof(Progress));
+            }
+
+            IsProgressBarVisible = Progress > 0 ? System.Windows.Visibility.Visible : System.Windows.Visibility.Hidden;
+            OnPropertyChanged(nameof(IsProgressBarVisible));
+        }
+
 
         public void SelectFile()
         {
