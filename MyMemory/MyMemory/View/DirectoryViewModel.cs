@@ -107,8 +107,12 @@ namespace MyMemory
         private void WhenFilePlayed(IPlaylistItem item)
         {
             // Update playlist
-            var active = _filesViewModel.SetActive(item);
-            AppStatus.Instance.Info($"Playing {item}", $"({active?.RowIndex}/{_playlist.Count})");
+            if (item != null)
+            {
+                var active = _filesViewModel.SetActive(item);
+                AppStatus.Instance.Info($"Playing {item}", $"({active?.RowIndex}/{_playlist.Count})");
+            }
+
             OnPropertyChanged(nameof(FileListViewModel));
         }
 
