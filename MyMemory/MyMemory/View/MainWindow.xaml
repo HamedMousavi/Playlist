@@ -107,7 +107,7 @@
                 <Button Padding="2" Margin="6" Width="32" Height="32" Command="{Binding PlayNextCommand}" BorderThickness="0" ToolTip="Play Next" Cursor="Hand" Background="Transparent">
                     <Image Style="{StaticResource LessBlurryImage}" Source="{StaticResource PlayNextIcon}" />
                 </Button>
-                <Button Padding="2" Margin="6" Width="32" Height="32" Command="{Binding SetIndexCommand}" BorderThickness="0" ToolTip="Bookmark Selected File" Cursor="Hand" Background="Transparent">
+                <Button Padding="2" Margin="6" Width="32" Height="32" Command="{Binding SetBookmarkCommand}" BorderThickness="0" ToolTip="Bookmark Selected File" Cursor="Hand" Background="Transparent">
                     <Image Style="{StaticResource LessBlurryImage}" Source="{StaticResource SetCurrIcon}" />
                 </Button>
             </StackPanel>

@@ -53,7 +53,7 @@ namespace MyMemory
         public ICommand PlayPreviousCommand => new RelayCommand(a => SelectedDirectory?.PlayPrevious(), a => SelectedDirectory != null && SelectedDirectory.CanPlayPrevious());
         public ICommand PlayCurrentCommand => new RelayCommand(a => SelectedDirectory?.PlayActive(), a => SelectedDirectory != null && SelectedDirectory.CanPlayActive());
         public ICommand PlayNextCommand => new RelayCommand(a => SelectedDirectory?.PlayNext(), a => SelectedDirectory != null && SelectedDirectory.CanPlayNext());
-        public ICommand SetIndexCommand => new RelayCommand(a => SelectedDirectory?.SelectFile(), a => SelectedDirectory != null);
+        public ICommand SetBookmarkCommand => new RelayCommand(a => SelectedDirectory?.SelectFile(), a => SelectedDirectory != null && SelectedDirectory.CanPlaySelected());
         public AppStatus Status => AppStatus.Instance;
         public Directories Directories { get; }
         public DirectoryViewModel SelectedDirectory
